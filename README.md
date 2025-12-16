@@ -217,3 +217,5 @@ This project builds upon others such as:
 -   [`rapidfuzz`](https://github.com/rapidfuzz/RapidFuzz), [`clean-text`](https://github.com/jfilter/clean-text), and [`scipy`](https://github.com/scipy/scipy) for text similarity matching.
 -   [`pyalex`](https://github.com/J535D165/pyalex), [`crossrefapi`](https://github.com/fabiobatalha/crossrefapi) (WIP), and [`more_itertools`](https://github.com/more-itertools/more-itertools) for metadata queries.
 -   [`dpath`](https://github.com/dpath-maintainers/dpath-python), [`networkx`](https://github.com/networkx/networkx) for citation graph data structure.
+-   [`loguru`](https://github.com/Delgan/loguru) for logging.
+
