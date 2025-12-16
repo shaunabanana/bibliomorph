@@ -64,18 +64,20 @@ from bibliomorph.loaders.snowball import SnowballLoader
 from bibliomorph.loaders.bibtex import BibTexLoader
 from bibliomorph.loaders.excel_links import ExcelLinksLoader
 
-CitationGraph(
-    path="snowball-data.json",
-    loader=SnowballLoader(),
-)
-.merge(
-    path="additional-bibtex.bib",
-    loader=BibTexLoader(),
-)
-.merge(
-    path="excel-citation-list.xlsx",
-    loader=ExcelLinksLoader(...),
-    ... # See below
+graph = (
+    CitationGraph(
+        path="snowball-data.json",
+        loader=SnowballLoader(),
+    )
+    .merge(
+        path="additional-bibtex.bib",
+        loader=BibTexLoader(),
+    )
+    .merge(
+        path="excel-citation-list.xlsx",
+        loader=ExcelLinksLoader(...),
+        ... # See below
+    )
 )
 ```
 
@@ -107,30 +109,32 @@ def format_target(strings: list[str]) -> list[str]:
     title = counts[0][0]
     return [title] * len(strings)
 
-CitationGraph(...)
-.merge(
-    path="excel-citation-list.xlsx",
-    loader=ExcelLinksLoader(
-        source="Paper",  # Source column name
-        target="Reference",  # Target column name
-        source_formatter=format_source,
-        target_formatter=format_target,
-        skip_sheets=["Info"],
-    ),
-    source_matcher=TextSimilarityMatcher(
-        threshold=18,
-        domain_id=lambda x: x,
-        domain_value=lambda x: x,
-        range_id=lambda node: node["id"],
-        range_value=lambda node: clean(node["csl"]["title"]),
-    ),
-    target_matcher=TextSimilarityMatcher(
-        threshold=37,
-        domain_id=lambda x: x,
-        domain_value=lambda x: x,
-        range_id=lambda node: node["id"],
-        range_value=lambda node: clean(node["csl"]["title"]),
-    ),
+graph = (
+    CitationGraph(...)
+    .merge(
+        path="excel-citation-list.xlsx",
+        loader=ExcelLinksLoader(
+            source="Paper",  # Source column name
+            target="Reference",  # Target column name
+            source_formatter=format_source,
+            target_formatter=format_target,
+            skip_sheets=["Info"],
+        ),
+        source_matcher=TextSimilarityMatcher(
+            threshold=18,
+            domain_id=lambda x: x,
+            domain_value=lambda x: x,
+            range_id=lambda node: node["id"],
+            range_value=lambda node: clean(node["csl"]["title"]),
+        ),
+        target_matcher=TextSimilarityMatcher(
+            threshold=37,
+            domain_id=lambda x: x,
+            domain_value=lambda x: x,
+            range_id=lambda node: node["id"],
+            range_value=lambda node: clean(node["csl"]["title"]),
+        ),
+    )
 )
 ```
 
@@ -141,8 +145,10 @@ After loading, the data can be processed by one or more processors to transform 
 ```python
 from bibliomorph.processors.openalex import OpenAlexEnricher
 
-CitationGraph(...)
-.run(processor=OpenAlexEnricher())
+graph = (
+    CitationGraph(...)
+    .run(processor=OpenAlexEnricher())
+)
 ```
 
 ### Saving to a specific format
@@ -151,49 +157,52 @@ Finally, the `.write()` method writes the data to the specified format. The libr
 ```python
 from bibliomorph.formatters.mapping import MappingJSONFormatter
 
-CitationGraph(...)
-.write(
-    path="output.json",
-    formatter=MappingJSONFormatter(
-        items_field="nodes",
-        links_field="links",
-        mapping={
-            "id": ["id"],
-            "domain": ["snowball/domain"],
-            "title": ["snowball/title", "csl/title"],
-            "abstract": ["snowball/abstract", "csl/abstract"],
-            "authors": ["snowball/authors", "csl/author"],
-            "year": ["snowball/year", "csl/issued/year"],
-            "venue": [
-                "snowball/venue",
-                "csl/collection_title",
-                "csl/container_title",
-            ],
-            "framing": ["snowball/framing"],
-            "codes": ["snowball/codes"],
-            "globalCitations": [
-                "snowball/globalCitations",
-                "csl/is-referenced-by-count",
-                "openalex/cited_by_count",
-            ],
-            "localCitations": lambda graph, item_id: len(graph.in_edges(item_id)),
-            "seed": ["snowball/seed"],
-        },
-        defaults={
-            "id": "",
-            "domain": "",
-            "title": "",
-            "abstract": "",
-            "authors": [],
-            "year": -1,
-            "localCitations": -1,
-            "seed": False,
-        },
-        postprocess={
-            "title": lambda title, _: str(title),
-            "venue": format_venue,
-        },
-    ),
+graph = (
+    CitationGraph(...)
+    .write(
+        path="output.json",
+        formatter=MappingJSONFormatter(
+            items_field="nodes",
+            links_field="links",
+            mapping={
+                "id": ["id"],
+                "domain": ["snowball/domain"],
+                "title": ["snowball/title", "csl/title"],
+                "abstract": ["snowball/abstract", "csl/abstract"],
+                "authors": ["snowball/authors", "csl/author"],
+                "year": ["snowball/year", "csl/issued/year"],
+                "venue": [
+                    "snowball/venue",
+                    "csl/collection_title",
+                    "csl/container_title",
+                ],
+                "framing": ["snowball/framing"],
+                "codes": ["snowball/codes"],
+                "globalCitations": [
+                    "snowball/globalCitations",
+                    "csl/is-referenced-by-count",
+                    "openalex/cited_by_count",
+                ],
+                "localCitations": lambda graph, item_id: len(graph.in_edges(item_id)),
+                "seed": ["snowball/seed"],
+            },
+            defaults={
+                "id": "",
+                "domain": "",
+                "title": "",
+                "abstract": "",
+                "authors": [],
+                "year": -1,
+                "localCitations": -1,
+                "seed": False,
+            },
+            postprocess={
+                "title": lambda title, _: str(title),
+                "venue": format_venue,
+            },
+        ),
+    )
 )
 ```
+
 
