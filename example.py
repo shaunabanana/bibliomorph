@@ -45,20 +45,21 @@ def format_venue(venue, item):
 
 graph = (
     CitationGraph(
-        path="/Users/shengchen/Developer/CareLR/data/data.json", loader=SnowballLoader()
+        path="snowball-data.json",
+        loader=SnowballLoader(),
     )
     .merge(
-        path="/Users/shengchen/Desktop/Key References.bib",
+        path="additional-bibtex.bib",
         loader=BibTexLoader(),
     )
     .merge(
-        path="/Users/shengchen/Desktop/Key Reference-14Nov2025.xlsx",
+        path="excel-citation-list.xlsx",
         loader=ExcelLinksLoader(
-            source="Document",
-            target="Text Content",
+            source="Paper",  # Source column name
+            target="Reference",  # Target column name
             source_formatter=format_source,
             target_formatter=format_target,
-            skip_sheets=["Error in Paper", "Info"],
+            skip_sheets=["Info"],
         ),
         source_matcher=TextSimilarityMatcher(
             threshold=18,
@@ -77,10 +78,10 @@ graph = (
     )
     .run(processor=OpenAlexEnricher())
     .write(
-        path="./test.json",
+        path="output.json",
         formatter=MappingJSONFormatter(
             items_field="nodes",
-            links_field="edges",
+            links_field="links",
             mapping={
                 "id": ["id"],
                 "domain": ["snowball/domain"],
