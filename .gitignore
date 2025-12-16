@@ -12,5 +12,6 @@ wheels/
 # macOS
 .DS_Store
 
-# data
+# data and temp
 *.json
+*.tmp

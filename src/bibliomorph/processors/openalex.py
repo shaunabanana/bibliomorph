@@ -3,7 +3,7 @@ from math import floor
 from loguru import logger
 from networkx import DiGraph
 from pyalex import OpenAlexResponseList, Works
-from itertools import batched
+from more_itertools import chunked
 
 from .processor import BaseProcessor
 
@@ -40,7 +40,7 @@ class OpenAlexEnricher(BaseProcessor):
         logger.debug(
             f"Querying OpenAlex for {len(dois)} DOIs with a batch size of 100."
         )
-        for batch in batched(dois, 100):
+        for batch in chunked(dois, 100):
             query_ids = [item_id for item_id, _ in batch]
             query_dois = [doi for _, doi in batch]
             response = Works().filter_or(doi=query_dois).get()
