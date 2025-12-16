@@ -24,7 +24,7 @@ class BibTexLoader(BaseLoader):
                     identifier = str(item["ISBN"])
                     identifiers["isbn"] = str(item["ISBN"]).replace("-", "").split(" ")
                 formatted = {
-                    "id": identifier,
+                    "id": identifier.lower(),
                     "identifiers": identifiers,
                     "csl": dict(item),
                 }

@@ -35,10 +35,10 @@ class SnowballLoader(BaseLoader):
                 identifiers["doi"] = [item["id"]]
             items.append(
                 {
-                    "id": item["id"],
+                    "id": item["id"].lower(),
                     "identifiers": identifiers,
                     "csl": csl,
                     "snowball": item,
                 }
             )
-        return items, data["edges"]
+        return items, data["links"]
