@@ -2,7 +2,7 @@
 
 A Python library for building bibliographic data processing pipelines, to merge, enrich, and export citation data from multiple heterogeneous sources.
 
-Current, Bibliomorph can help with the following:
+Currently, Bibliomorph can help with the following:
 * Load bibliographic data from multiple formats ([Snowball](https://github.com/shaunabanana/snowball), BibTeX, Excel (citation links))
 * Use string similarity matching to resolve textual mentions of papers (e.g. formatted citations) to structured paper records in a best-effort manner.
 * Enrich records with external metadata (OpenAlex)
@@ -12,7 +12,7 @@ Current, Bibliomorph can help with the following:
 > [!NOTE]
 > This library is a work-in-progress. API changes may occur in future versions.
 
-## Conceptual Overview
+## Overview
 
 Bibliomorph operates around a **citation graph** abstraction:
 
@@ -21,13 +21,27 @@ Bibliomorph operates around a **citation graph** abstraction:
 
 A typical pipeline consists of:
 
-1. Creating a `CitationGraph`
-2. Loading one or more data sources
-3. Merging sources with optional matching logic
+1. Creating a `CitationGraph` with a data source
+3. Merging other sources with optional matching logic
 4. Running processors to enrich or transform the graph
-5. Define an output format and writing the graph.
+5. Define an output format and saving the graph as a JSON file.
 
-This pipeline is fully declarative and composable.
+This pipeline is fully declarative and composable. Merging data from multiple sources is non-destructive. Each loader will typically add its own field to the item, identified by some string. Then, appropirate data is merged into the "csl" field, in the format of CSL-JSON. During merging, only empty fields are filled, in the order defined by the order of `merge()` operations.
+
+```
+item = {
+    "id": "10.some/identifer.such.as.doi",  # A unique string used by the library to identify the item, not guaranteed to be a specific format. You may want to use data in the "identifiers" field.
+    "identifiers": {  # Identifiers of the item. 
+        "doi": [...],
+        "isbn": [...],
+        ...
+    },
+    "csl": {...}  # CSL-JSON format data
+    "ris": {...}  # Other loader-defined fields
+    "excel-attributes": {...}  # Other loader-defined fields
+    "snowball": {...}  # Other loader-defined fields
+}
+```
 
 ## Usage
 
@@ -38,7 +52,7 @@ pip install bibliomorph
 
 ### Loading and merging data
 
-This example combines three data sources:
+The following example combines three data sources:
 
 1. **Snowball JSON**: Produced by the Snowball app and containing curated metadata and citation relationships.
 2. **BibTeX/RIS**: Standard reference formats, but may not contain citation data.
@@ -93,6 +107,7 @@ def format_target(strings: list[str]) -> list[str]:
     title = counts[0][0]
     return [title] * len(strings)
 
+CitationGraph(...)
 .merge(
     path="excel-citation-list.xlsx",
     loader=ExcelLinksLoader(
@@ -134,6 +149,9 @@ CitationGraph(...)
 Finally, the `.write()` method writes the data to the specified format. The library supplies a `MappingJSONFormatter`, which allows you to define which values (and priority) to map to a output JSON field:
 
 ```python
+from bibliomorph.formatters.mapping import MappingJSONFormatter
+
+CitationGraph(...)
 .write(
     path="output.json",
     formatter=MappingJSONFormatter(
@@ -178,3 +196,4 @@ Finally, the `.write()` method writes the data to the specified format. The libr
     ),
 )
 ```
+
