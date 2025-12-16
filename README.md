@@ -27,7 +27,7 @@ A typical pipeline consists of:
 3. Running processors to enrich or transform the graph
 4. Define an output format and saving the graph as a JSON file.
 
-This pipeline is fully declarative and composable. Merging data from multiple sources is non-destructive. Each loader will typically add its own field to the item, identified by some string. Then, appropirate data is merged into the "csl" field, in the format of CSL-JSON. During merging, only empty fields are filled, in the order defined by the order of `merge()` operations.
+This pipeline is fully declarative and composable. Merging data from multiple sources is non-destructive. Each `loader` will typically add its own field to the item, identified by some string. Then, appropirate data is merged into the "csl" field, in the format of CSL-JSON. During merging, only empty fields are filled, in the order defined by the order of `merge()` operations.
 
 ```
 item = {
@@ -218,4 +218,5 @@ This project builds upon others such as:
 -   [`pyalex`](https://github.com/J535D165/pyalex), [`crossrefapi`](https://github.com/fabiobatalha/crossrefapi) (WIP), and [`more_itertools`](https://github.com/more-itertools/more-itertools) for metadata queries.
 -   [`dpath`](https://github.com/dpath-maintainers/dpath-python), [`networkx`](https://github.com/networkx/networkx) for citation graph data structure.
 -   [`loguru`](https://github.com/Delgan/loguru) for logging.
+
 
