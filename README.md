@@ -205,4 +205,12 @@ graph = (
 )
 ```
 
+## Acknowledgement
+
+This project builds upon others such as:
+- [`citeproc-py`](https://github.com/citeproc-py/citeproc-py) for BibTeX, RIS, CSL-JSON processing and formatting.
+- [`pandas`](https://github.com/pandas-dev/pandas) and [`openpyxl`](https://foss.heptapod.net/openpyxl/openpyxl) for Excel data processing.
+- [`rapidfuzz`](https://github.com/rapidfuzz/RapidFuzz), [`clean-text`](https://github.com/jfilter/clean-text), and [`scipy`](https://github.com/scipy/scipy) for text similarity matching. 
+- [`pyalex`](https://github.com/J535D165/pyalex) and [`crossrefapi`](https://github.com/fabiobatalha/crossrefapi) (WIP) for metadata queries.
+- [`dpath`](https://github.com/dpath-maintainers/dpath-python), [`networkx`](https://github.com/networkx/networkx) for citation graph data structure.
 
