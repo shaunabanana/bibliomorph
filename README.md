@@ -154,6 +154,10 @@ graph = (
 )
 ```
 
+
+> [!NOTE]
+> **Caveat**: Technically `OpenAlexEnricher` (and in the future `CrossRefEnricher`) can also add citation links to the data. This will be implemented in a future update.
+
 ### Saving to a specific format
 
 Finally, the `.write()` method writes the data to the specified format. The library supplies a `MappingJSONFormatter`, which allows you to define which values (and priority) to map to a output JSON field:
@@ -228,6 +232,7 @@ This project builds upon others such as:
 -   [`pyalex`](https://github.com/J535D165/pyalex), [`crossrefapi`](https://github.com/fabiobatalha/crossrefapi) (WIP), and [`more_itertools`](https://github.com/more-itertools/more-itertools) for metadata queries.
 -   [`dpath`](https://github.com/dpath-maintainers/dpath-python), [`networkx`](https://github.com/networkx/networkx) for citation graph data structure.
 -   [`loguru`](https://github.com/Delgan/loguru) for logging.
+
 
 
 
