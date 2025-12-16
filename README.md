@@ -146,6 +146,7 @@ After loading, the data can be processed by one or more processors to transform 
 
 ```python
 from bibliomorph.processors.openalex import OpenAlexEnricher
+from bibliomorph.utils.formatting import venue_abbreviation
 
 graph = (
     CitationGraph(...)
@@ -159,6 +160,15 @@ Finally, the `.write()` method writes the data to the specified format. The libr
 
 ```python
 from bibliomorph.formatters.mapping import MappingJSONFormatter
+
+def format_venue(venue, item):
+    if "csl" not in item:
+        print(item)
+    if "snowball" in item and item["snowball"]["venue"] is not None:
+        return venue_abbreviation(str(venue))
+    elif "type" in item["csl"] and item["csl"]["type"] == "paper-conference":
+        return venue_abbreviation(str(venue))
+    return None
 
 graph = (
     CitationGraph(...)
@@ -218,5 +228,6 @@ This project builds upon others such as:
 -   [`pyalex`](https://github.com/J535D165/pyalex), [`crossrefapi`](https://github.com/fabiobatalha/crossrefapi) (WIP), and [`more_itertools`](https://github.com/more-itertools/more-itertools) for metadata queries.
 -   [`dpath`](https://github.com/dpath-maintainers/dpath-python), [`networkx`](https://github.com/networkx/networkx) for citation graph data structure.
 -   [`loguru`](https://github.com/Delgan/loguru) for logging.
+
 
 
