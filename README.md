@@ -1,5 +1,7 @@
 # Bibliomorph
 
+[![DOI](https://zenodo.org/badge/1098219223.svg)](https://doi.org/10.5281/zenodo.20234370)
+
 A Python library for building bibliographic data processing pipelines, to merge, enrich, and export citation data from multiple heterogeneous sources.
 
 Currently, Bibliomorph can help with the following:
